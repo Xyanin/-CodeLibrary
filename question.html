@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>问题</title>
+  </head>
+  <script type="text/javascript" src='vue.js'></script>
+  <style>
+    #content {
+      width: 400px;
+      background: #f2f2f2;
+    }
+    ul {
+      background-color: #b8b8b8;
+      margin:0;
+      padding:0;
+    }
+    .choiceli {
+      list-style:none;
+      text-align: center;
+      border: 1px solid #000;
+      cursor: pointer;
+    }
+    .option {
+      background: #4a4a4a;
+    }
+    .optionNo {
+      background: #9b9b9b;
+    }
+  </style>
+  <body>
+    <div id="box">
+      <div id="content" v-for="(item, index) in question">
+        <p>{{item.title}}</p>
+        <ul>
+          <li class="choiceli" v-for="(choice,key) in item.answer" @click='selectTab(index, key)' :class="{option: optionTab[index] === key+1, optionNo: optionTab[index]!= key+1}"> {{ choice }} </li>
+        </ul>
+      </div>
+    </div>
+    <script>
+      new Vue({
+        el: '#box',
+        data: {
+          question: [
+            {
+              title: '1这是始终显示的标题嗷嗷嗷啊示的标题嗷嗷嗷示的标题嗷嗷嗷示的标题嗷嗷嗷示的标题嗷嗷嗷',
+              answer: [1, 2],
+              type: 1 //1为单选
+            },
+            {
+              title: '1这是始终显示的标题嗷嗷嗷啊示',
+              answer: [1, 2, 3],
+              type: 2 //2为多选
+            },
+          ],
+          optionTab: [],
+        },
+        methods: {
+          selectTab(index, key) {
+            this.$set(this.optionTab, index, key+1)
+          },
+        },
+        mounted() {
+          if (this.question.length != this.optionTab.length) {
+            for(let i = 0; i < this.question.length; i++) {
+              this.$set(this.optionTab, i, 0)
+            }
+          }
+        }
+      })
+    </script>
+  </body>
+</html>
