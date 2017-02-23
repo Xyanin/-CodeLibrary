@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>折叠</title>
+    <script type="text/javascript" src="./jquery.js"></script>
+    <script type="text/javascript" src='vue.js'></script>
+  </head>
+  <style>
+    span {
+      display: inline-block;
+    }
+    .box {
+      width: 300px;
+      border: 1px solid black;
+      margin: 20px;
+    }
+    .right {
+      float: right;
+      cursor: pointer;
+    }
+    .title {
+      width: 100%;
+      border-bottom: 1px solid black;
+      display:inline-block;
+    }
+    .text {
+      padding: 20px 20px 0;
+    }
+    .content {
+      padding: 20px;
+    }
+    .is-active {
+      display: none;
+    }
+    .click {
+      background: url('./img/fold2.png') no-repeat;
+      background-size: 100%;
+    }
+    .unclick {
+      background: url('./img/fold1.png') no-repeat;
+      background-size: 100%;
+    }
+    #img {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+    }
+  </style>
+  <body>
+    <!-- <div id="wrap">
+      <div class="box">
+        <div class="title">
+          <div class="text">
+            <span>{{ title0 }}</span>
+            <div class="right" id="right0" v-on:click="fold(0)">
+              <span>{{ img[0] }}</span>
+              <i id="img" :class='foldStatus[0] ? "click" : "unclick"'></i>
+            </div>
+          </div>
+        </div>
+        <div class="content" id="content0" :class='foldStatus[0] ? "is-active" : ""'>{{ content0 }}</div>
+      </div>
+      <div class="box">
+        <div class="title">
+          <span>{{ title0 }}</span>
+          <div class="right" id="right1" v-on:click="fold(1)">
+            <span>{{ img[1] }}</span>
+            <i id="img" :class='foldStatus[1] ? "click" : "unclick"'></i>
+          </div>
+        </div>
+        <div class="content" id="content1" :class='foldStatus[1] ? "is-active" : ""'>{{ content0 }}</div>
+      </div>
+    </div> -->
+
+    <div id="wrap1">
+      <div class="box" v-for="(item, index) in list">
+        <div class="title">
+          <div class="text">
+            <span>{{ item.title }}</span>
+            <div class="right" v-on:click="fold(index)">
+              <span>{{ text[index] }}</span>
+              <i id="img" :class='foldStatus[index] ? "click" : "unclick"'></i>
+            </div>
+          </div>
+        </div>
+        <div class="content" :class='foldStatus[index] ? "is-active" : ""'>{{ item.content }}</div>
+      </div>
+    </div>
+
+    <script>
+      // new Vue({  //若是定死有几个框需要折叠 即可用这种方法
+      //   el: '#wrap',
+      //   data: {
+      //     img: ['展开', '展开'],
+      //     title0: '1这是始终显示的标题嗷嗷嗷啊示的标题嗷嗷嗷示的标题嗷嗷嗷示的标题嗷嗷嗷示的标题嗷嗷嗷',
+      //     content0: '锵锵锵',
+      //     foldStatus: [false, false],
+      //   },
+      //   methods: {
+      //     fold(index) {
+      //       const val = this.foldStatus[index]
+      //       if (this.foldStatus[index]) {
+      //         this.$set(this.img, index, '展开')
+      //       } else {
+      //         this.$set(this.img, index, '收起')
+      //         console.log(this.img)
+      //       }
+      //       this.$set(this.foldStatus, index, !val)
+      //     },
+      //   },
+      // }),
+
+      new Vue({
+        el: '#wrap1',
+        data: {
+          list: [
+            {
+              title: '1这是始终显示的标题嗷嗷嗷啊示的标题嗷嗷嗷示的标题嗷嗷嗷示的标题嗷嗷嗷示的标题嗷嗷嗷',
+              content: '锵锵锵'
+            },
+            {
+              title: '1这是始终显示的标题嗷嗷嗷啊示',
+              content: '锵锵锵'
+            },
+            {
+              title: '1这是始终显示的标题嗷嗷嗷啊示',
+              content: '锵锵锵'
+            },
+          ],
+          text: [],
+          foldStatus: [],
+        },
+        methods: {
+          fold(index) {
+            const val = this.foldStatus[index]
+            if (this.foldStatus[index]) {
+              this.$set(this.text, index, '展开')
+            } else if (index === 2){
+              this.$set(this.text, index, '收起')
+            } else {
+              this.$set(this.text, index, '收')
+            }
+            this.$set(this.foldStatus, index, !val)
+          },
+        },
+        mounted() {
+          if (this.list.length != this.text.length) {
+            for(let i = 0; i < this.list.length; i++) {
+              this.$set(this.text, i, '展开')
+              this.$set(this.foldStatus, i, false)
+            }
+          }
+        }
+      })
+    </script>
+  </body>
+</html>
