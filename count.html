@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>倒计时</title>
+    <script type="text/javascript" src='vue.js'></script>
+  </head>
+  <style>
+    input {
+      border: 1px solid #000
+    }
+    .btn {
+      cursor: pointer;
+      width: 100px;
+      background-color: #fff;
+      border: 1px solid black;
+      border-radius: 6px;
+      text-align: center;
+    }
+    .click {
+      visibility: visible;
+    }
+    .unclick {
+      visibility: hidden;
+    }
+    .alert {
+      border: 1px solid red;
+    }
+  </style>
+  <body>
+    <div id="box">
+      <input placeholder="邮箱" @input='handleInputmail' :class="mailno ? '' : 'alert'">
+      <input placeholder="手机号" @input='handleInput' :class="numno ? '' : 'alert'">
+      <div class="btn" @click='testnum()'>{{ test }}</div>
+      <div id='notice' :class='isClick ? "click" : "unclick"'>验证码发送至 {{ fmtToHtml(num) }} 的手机</div>
+      <div class="btn" id="btn" @click='count()'>{{ text }}</div>
+    </div>
+    <script>
+      new Vue({
+        el: '#box',
+        data: {
+          text: '发送验证码',
+          isClick: false,
+          num: '',
+          mail: '',
+          test: '检测',
+          mailno: true,
+          numno: true,
+        },
+        methods: {
+          handleInput(event) {
+            this.num = event.target.value
+          },
+          handleInputmail(event) {
+            this.mail = event.target.value
+          },
+          fmtToHtml(obj) {
+            const str = obj
+            const tel = str.split('')
+            tel.splice(3, 6, '******')
+            return tel.join('')
+          },
+          testnum() {
+            this.mailno = true
+            this.numno = true
+            if (!/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,9}$/i.test(this.mail.trim())) {
+              this.mailno = false
+            }
+            if (!/^1[3|5|8]\d{9}$/.test(this.num.trim())) {
+              this.numno = false
+            }
+          },
+          count() {
+            if (!this.isClick) {
+              let i = 61
+              this.isClick = true
+              console.log(this.isClick)
+              const pMsgTimer = setInterval(() => {
+                i--
+                this.text = `${i}秒后重发`
+                if (i === 0) {
+                  clearInterval(pMsgTimer)
+                  this.text = '发送验证码'
+                  this.isClick = false
+                }
+              }, 1000)
+            }
+          },
+        },
+      })
+    </script>
+  </body>
+</html>
