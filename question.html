@@ -33,7 +33,7 @@
       <div id="content" v-for="(item, index) in question">
         <p>{{item.title}}</p>
         <ul>
-          <li class="choiceli" v-for="(choice,key) in item.answer" @click='selectTab(index, key)' :class="{option: optionTab[index] === key+1, optionNo: optionTab[index]!= key+1}"> {{ choice }} </li>
+          <li class="choiceli" v-for="(choice, key) in item.answer" @click='selectTab(item.type, index, key)' :class="classObject(item.type, index, key)"> {{ choice }} </li>
         </ul>
       </div>
     </div>
@@ -48,22 +48,60 @@
               type: 1 //1为单选
             },
             {
+              title: '1这是始终显示的标题嗷嗷嗷啊示的标题嗷嗷嗷示的标题嗷嗷嗷示的标题嗷嗷嗷示的标题嗷嗷嗷',
+              answer: [1, 2],
+              type: 1 //1为单选
+            },
+            {
               title: '1这是始终显示的标题嗷嗷嗷啊示',
               answer: [1, 2, 3],
               type: 2 //2为多选
             },
+            {
+              title: '1这是始终显示的标题嗷嗷嗷啊示',
+              answer: [1, 2, 3, 4],
+              type: 2 //2为多选
+            },
           ],
           optionTab: [],
+          optionClick: [],
+          optionResult:[],
         },
         methods: {
-          selectTab(index, key) {
-            this.$set(this.optionTab, index, key+1)
+          selectTab(type, index, key) {
+            if(type === 1) {
+              this.$set(this.optionClick, index, key+1)
+            } else if (type === 2) {
+              const val = this.optionClick[index][key]
+              const click = this.optionClick[index]
+              this.$set(click, key, !val)
+              this.$set(this.optionClick, index, click)
+            }
           },
+          classObject(type, index, key) {
+            if(type === 1) {
+              return {
+                option: this.optionClick[index] === key+1,
+                optionNo: this.optionClick[index]!= key+1
+              }
+            } else if (type === 2) {
+              return {
+                option: this.optionClick[index][key] === true,
+                optionNo: this.optionClick[index][key] === false
+              }
+            }
+          }
         },
-        mounted() {
-          if (this.question.length != this.optionTab.length) {
-            for(let i = 0; i < this.question.length; i++) {
-              this.$set(this.optionTab, i, 0)
+        created() {
+          const question = this.question
+          for(var i = 0; i < question.length; i++) {
+            this.optionClick[i] = new Array();
+            for(var j=0; j < question[i].answer.length; j++) {
+              if (question[i].type === 1) {
+                this.optionClick[i][0] = 0
+              } else if (question[i].type === 2) {
+                this.optionClick[i][j] = false
+              }
             }
           }
         }
