@@ -67,6 +67,21 @@
           optionClick: [],
           optionResult:[],
         },
+        computed: {
+          translate() {
+            for(var i = 0; i < this.optionClick.length; i++) {
+              if(this.optionClick[i].length) {
+                for(var j = 0; j < this.optionClick[i].length; j++) {
+                  if(this.optionClick[i][j] === true) {
+                    this.optionResult[i].push(j)
+                  }
+                }
+              } else {
+                this.optionResult[i] = this.optionClick[i]
+              }
+            }
+          }
+        },
         methods: {
           selectTab(type, index, key) {
             if(type === 1) {

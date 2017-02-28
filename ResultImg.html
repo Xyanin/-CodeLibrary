@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>结果动图页</title>
+  </head>
+  <script type="text/javascript" src='vue.js'></script>
+  <style>
+  .risk {
+    width: 518px;
+    height: 173px;
+    position: absolute;
+    top: 68px;
+    left: 24px;
+    background: url('./img/risk.png') no-repeat;
+    background-size: 100%;
+  }
+  .mask {
+    width: 518px;
+    height: 173px;
+    position: absolute;
+    top: 68px;
+    left: 24px;
+    background: rgba(255, 255, 255, 0.5);
+    transition: all 1s ease-out;
+  }
+  .mask1 {
+    left: 198px
+  }
+  .mask2 {
+    left: 370px
+  }
+  .mask3 {
+    left: 542px
+  }
+  .arrow {
+    width: 20px;
+    height: 15px;
+    position: absolute;
+    left: 20px;
+    top: 200px;
+    background: url('./img/risk_arrow.png');
+    background-size: 100%;
+    transition: all 1s ease-out;
+  }
+  .arrow1 {
+    left: 188px;
+    top: 152px;
+  }
+  .arrow2 {
+    left: 360px;
+    top: 110px;
+  }
+  .arrow3{
+    left: 526px;
+    top: 20px;
+  }
+  .title1 {
+    color: #58C8EF;
+    opacity: 1;
+  }
+  .title2 {
+    color: #FFA858;
+    opacity: 1;
+  }
+  .title3 {
+    color: #F35D5D;
+    opacity: 1;
+  }
+  .change {
+    width: 100px;
+    height: 40px;
+    border-radius: 10px;
+    border: #fff solid 1px;
+  }
+  </style>
+  <body>
+    <div id="app">
+      <button class="change" @click='change()'>变变变</button>
+      <div class="risk"></div>
+      <div class="mask" :class='rankMask(type)'></div>
+      <div class="arrow" :class='rankArrow(type)'></div>
+      <div class="title" :class="rankTitle(type)">{{ title }}</div>
+    </div>
+    <script>
+    new Vue({
+      el: '#app',
+      data: {
+        type: 0,
+        text: '',
+      },
+      computed: {
+        title() {
+          if (this.type === 1) {
+            this.text = '保守型'
+          } else if (this.type === 2) {
+            this.text = '稳健性'
+          } else if (this.type === 3) {
+            this.text = '激进型'
+          }
+          return this.text
+        }
+      },
+      methods: {
+        change() {
+          if (this.type === 3) {
+            this.type = 0
+          } else {
+            this.type ++
+          }
+        },
+        rankMask() {
+          return {
+            mask1: this.type === 1,
+            mask2: this.type === 2,
+            mask3: this.type === 3,
+          }
+        },
+        rankArrow() {
+          return {
+            arrow1: this.type === 1,
+            arrow2: this.type === 2,
+            arrow3: this.type === 3,
+          }
+        },
+        rankTitle() {
+          return {
+            title1: this.type === 1,
+            title2: this.type === 2,
+            title3: this.type === 3,
+          }
+        },
+      }
+    })
+    </script>
+  </body>
+</html>
